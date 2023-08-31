@@ -10,6 +10,26 @@ FONT_SIZE = 10
 
 
 # Password Generator Project
+# --------------------------- SEARCH ------------------------------------------- #
+def search(website_entry):
+    website = website_entry.get()
+    if website:
+        try:
+            with open("data.json", mode="r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            messagebox.showinfo(title="Error", message="No Data File Found.")
+        else:
+            if website in data:
+                result = data[website]
+                username = result["username"]
+                password = result["password"]
+                messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
+            else:
+                messagebox.showinfo(title="Error", message="No Data File Found.")
+    else:
+        messagebox.showinfo(title="Error", message="Please enter Website name.")
+
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generate_password(password_entry):
@@ -102,16 +122,21 @@ def main():
 
     add_btn = tkinter.Button(text="Add", width=34,
                              command=lambda: save_password(website_entry, username_entry, password_entry))
-    add_btn.place(x=add_btn.winfo_x() + 50, y=add_btn.winfo_y())
+    # add_btn.place(x=add_btn.winfo_x() + 50, y=add_btn.winfo_y())
     add_btn.grid(row=4, column=1, columnspan=2)
 
-    '''This statement is used to shift the "Add button" to the right
+    search_btn = tkinter.Button(text="Search", command=lambda: search(website_entry))
+    search_btn.grid(row=1, column=2)
+
+    '''This statement is used to shift the "Add button" and "Search button" to the right
     window.grid_columnconfigure(1, weight=1)
     
     ToDo: Check why it's not working
     '''
 
     window.mainloop()
+
+    # TODO: add encryption mechanism and revise the Add btn
 
 
 if __name__ == "__main__":
