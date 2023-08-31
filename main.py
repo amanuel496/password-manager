@@ -3,6 +3,7 @@ from tkinter import END
 from tkinter import messagebox
 from random import randint, choice, shuffle
 import pyperclip
+import json
 
 FONT_STYLE = "Arial"
 FONT_SIZE = 10
@@ -39,18 +40,25 @@ def save_password(website_entry, username_entry, password_entry):
     website = website_entry.get()
     username = username_entry.get()
     password = password_entry.get()
+    new_data = {
+        website: {
+            "username": username,
+            "password": password
+        }
+    }
 
     if website and username and password:
-        is_ok = messagebox.askokcancel(title=website, message=f"Is the following info correct?\n"
-                                                              f"Username: {username}\nPassword: {password}")
-        if is_ok:
-            with open("data.txt", mode="a") as file:
-                file.write(f"{website} | {username} | {password}\n")
-            # Wipe out the contents from GUI
-            website_entry.delete(0, END)
-            # username_entry.delete(0, END)
-            password_entry.delete(0, END)
-            website_entry.focus()
+        with open("data.json", mode="r") as file:
+            data = json.load(file)
+            data.update(new_data)
+        with open("data.json", mode="w") as file:
+            json.dump(data, file, indent=4)
+
+        # Wipe out the contents from GUI
+        website_entry.delete(0, END)
+        # username_entry.delete(0, END)
+        password_entry.delete(0, END)
+        website_entry.focus()
     else:
         messagebox.showwarning(title="Oops", message="Please don't leave any fields empty!")
 
