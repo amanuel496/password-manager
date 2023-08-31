@@ -48,17 +48,21 @@ def save_password(website_entry, username_entry, password_entry):
     }
 
     if website and username and password:
-        with open("data.json", mode="r") as file:
-            data = json.load(file)
+        try:
+            with open("data.json", mode="r") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            with open("data.json", mode="w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
             data.update(new_data)
-        with open("data.json", mode="w") as file:
-            json.dump(data, file, indent=4)
-
-        # Wipe out the contents from GUI
-        website_entry.delete(0, END)
-        # username_entry.delete(0, END)
-        password_entry.delete(0, END)
-        website_entry.focus()
+            with open("data.json", mode="w") as file:
+                json.dump(data, file, indent=4)
+        finally:
+            # Wipe out the contents from GUI
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
+            website_entry.focus()
     else:
         messagebox.showwarning(title="Oops", message="Please don't leave any fields empty!")
 
