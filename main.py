@@ -89,7 +89,8 @@ def save_password(website_entry, username_entry, password_entry):
 
 # ---------------------------- UI SETUP ------------------------------- #
 def main():
-    window = tkinter.Tk("Password Manager")
+    window = tkinter.Tk()
+    window.title("Password Manager")
     window.config(padx=50, pady=50)
 
     canvas = tkinter.Canvas(width=200, height=200)
